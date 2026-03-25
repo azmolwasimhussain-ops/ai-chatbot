@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus AI</title>
+    <!-- Modern typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Marked.js for extensive markdown support -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify to safely format markdown -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+    <meta name="description" content="A modern, ChatGPT-style AI Chatbot supporting text and image generation.">
+</head>
+<body class="dark-mode">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" id="newChatBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    New Chat
+                </button>
+                <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle Light/Dark Theme">
+                   <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                   <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+            
+            <div class="history-list-container">
+                <span class="history-label">Previous Chats</span>
+                <div class="history-list" id="historyList">
+                    <!-- History items appended automatically mapping to localStorage chats -->
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="settings-btn" id="settingsBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Settings
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            <header class="chat-header mobile-only">
+                <button id="mobileMenuBtn" class="icon-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <h1>Nexus AI</h1>
+            </header>
+
+            <div class="chat-container">
+                <div class="chat-box" id="chatBox">
+                    <!-- Conversations mapped here dynamically -->
+                </div>
+            </div>
+
+            <!-- Sticky Bottom Input -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <!-- Voice API Bonus Feature -->
+                    <button class="action-btn icon-btn" id="voiceBtn" title="Voice Dictation" aria-label="Voice input">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="mike-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    </button>
+                    <!-- Explicit Image Generator -->
+                    <button class="action-btn icon-btn" id="generateImageBtn" title="Generate Image" aria-label="Generate Image">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="image-icon" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    </button>
+                    <!-- Improved dynamic stretching textarea -->
+                    <textarea id="userInput" placeholder="Message Nexus AI... (Shift+Enter for newline)" rows="1"></textarea>
+                    
+                    <button class="action-btn primary-btn icon-btn send-bubble" id="sendBtn" title="Send (Enter)" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </div>
+                <div class="input-disclaimer">Nexus AI can make mistakes. Consider verifying important information.</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Overlay Modal -->
+    <div class="modal-overlay hidden" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Settings Panel</h2>
+                <button class="icon-btn" id="closeSettingsBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>OpenRouter API Key (Text Models)</label>
+                    <input type="password" id="settingOpenRouterKey" placeholder="sk-or-v1-...">
+                </div>
+                <div class="form-group">
+                    <label>Hugging Face API Key (Image Models)</label>
+                    <input type="password" id="settingHFKey" placeholder="hf_...">
+                </div>
+                <div class="form-group">
+                    <label>Text Model Endpoint</label>
+                    <select id="settingTextModel">
+                        <option value="openrouter/free">Auto Free Router (openrouter/free) (Recommended)</option>
+                        <option value="meta-llama/llama-3-8b-instruct:free">Llama 3 8B</option>
+                        <option value="google/gemma-7b-it:free">Gemma 7B (Free)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Image Model</label>
+                    <select id="settingImageModel">
+                        <option value="black-forest-labs/FLUX.1-schnell">FLUX.1-schnell (Turbo)</option>
+                        <option value="stabilityai/stable-diffusion-xl-base-1.0">SDXL Base 1.0 (Slow but detailed)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>System Prompts Override</label>
+                    <textarea id="settingSystemPrompt" rows="3" placeholder="You are Nexus AI, a helpful assistant..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="secondary-btn action-btn text-btn" id="cancelSettingsBtn">Cancel</button>
+                <button class="primary-btn action-btn text-btn" id="saveSettingsBtn">Save & Apply</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Image Fullscreen Modal Popup -->
+    <div class="modal-overlay hidden" id="imageModal" style="background: rgba(0,0,0,0.8);">
+        <button class="icon-btn" id="closeImageBtn" style="position:absolute; top:20px; right:20px; color:white;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <img id="fullscreenImage" src="" alt="Fullscreen Generated Image" style="max-width:90vw; max-height:90vh; border-radius:10px; margin:auto;">
+    </div>
+
+    <!-- Modularized Scripts Stack -->
+    <script src="config.js"></script>
+    <script src="storage.js"></script>
+    <script src="apiService.js"></script>
+    <script src="uiManager.js"></script>
+    <script src="chatManager.js"></script>
+</body>
+</html>
